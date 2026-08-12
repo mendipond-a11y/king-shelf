@@ -56,7 +56,15 @@ h1{font-size:34px;line-height:.98;margin:7px 0 5px;letter-spacing:-.03em}
 .tower-item{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #29282e}
 .tower-num{width:28px;color:var(--gold);font-weight:bold} .tower-title{flex:1} .tower-check{width:25px;height:25px;border-radius:50%;border:1px solid #666;display:grid;place-items:center;font:13px system-ui}
 .tower-item.read .tower-check{background:var(--red);border-color:var(--red2)}
-.place-card{padding:12px;border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#121216}
+.place-card{padding:12px;border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#121216}.stat-button{border:1px solid var(--line);text-align:left;color:var(--ink);width:100%}
+.full-button{width:100%;text-align:center;margin-top:10px}
+.action-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #29282e}
+.action-row:last-child{border-bottom:0}
+.action-row .row-title{flex:1}
+.row-check{width:27px;height:27px;border-radius:50%;border:1px solid #666;display:grid;place-items:center;font:13px system-ui;background:#101014}
+.action-row.read .row-check{background:var(--red);border-color:var(--red2)}
+.row-more{background:transparent;border:0;color:#888;font-size:20px;padding:4px 7px}
+
 .place-card b{font-size:16px} .place-card small{display:block;color:var(--muted);font:11px/1.4 system-ui;margin-top:4px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px} .chip{border:1px solid #4a454b;border-radius:99px;padding:5px 8px;font:10px system-ui;color:var(--muted)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.68);backdrop-filter:blur(5px);display:none;align-items:flex-end;z-index:20}
@@ -295,6 +303,7 @@ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);color:#
   <button data-tab="meTab"><strong>👤</strong>Me</button>
 </nav>
 
+<div class="modal" id="drillModal"><div class="sheet"><div class="sheet-head"><div><h2 id="drillTitle"></h2><div class="meta-line" id="drillMeta"></div></div><button class="close" id="closeDrill">×</button></div><div id="drillBody"></div></div></div>
 <div class="modal" id="modal">
   <div class="sheet">
     <div class="sheet-head"><div><h2 id="modalTitle"></h2><div class="meta-line" id="modalMeta"></div></div><button class="close" id="closeModal">×</button></div>
@@ -309,6 +318,15 @@ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);color:#
 </div>
 
 
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.getRegistrations().then(function (regs) {
+      regs.forEach(function (reg) { reg.unregister(); });
+    });
+  });
+}
+</script>
 <script>
 const works = [{"title": "Carrie", "year": 1974, "type": "Novel", "group": "Core"}, {"title": "'Salem's Lot", "year": 1975, "type": "Novel", "group": "Core"}, {"title": "The Shining", "year": 1977, "type": "Novel", "group": "Core"}, {"title": "Rage", "year": 1977, "type": "Bachman", "group": "Bachman"}, {"title": "The Stand", "year": 1978, "type": "Novel", "group": "Core"}, {"title": "The Long Walk", "year": 1979, "type": "Bachman", "group": "Bachman"}, {"title": "The Dead Zone", "year": 1979, "type": "Novel", "group": "Core"}, {"title": "Firestarter", "year": 1980, "type": "Novel", "group": "Core"}, {"title": "Roadwork", "year": 1980, "type": "Bachman", "group": "Bachman"}, {"title": "Cujo", "year": 1981, "type": "Novel", "group": "Core"}, {"title": "The Running Man", "year": 1982, "type": "Bachman", "group": "Bachman"}, {"title": "The Gunslinger", "year": 1982, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "Christine", "year": 1983, "type": "Novel", "group": "Core"}, {"title": "Pet Sematary", "year": 1983, "type": "Novel", "group": "Core"}, {"title": "Cycle of the Werewolf", "year": 1985, "type": "Novel", "group": "Core"}, {"title": "The Talisman", "year": 1984, "type": "Collaboration", "group": "Collaboration"}, {"title": "Thinner", "year": 1984, "type": "Bachman", "group": "Bachman"}, {"title": "The Eyes of the Dragon", "year": 1987, "type": "Novel", "group": "Core"}, {"title": "It", "year": 1986, "type": "Novel", "group": "Core"}, {"title": "Misery", "year": 1987, "type": "Novel", "group": "Core"}, {"title": "The Tommyknockers", "year": 1987, "type": "Novel", "group": "Core"}, {"title": "The Drawing of the Three", "year": 1987, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "The Dark Half", "year": 1989, "type": "Novel", "group": "Core"}, {"title": "The Waste Lands", "year": 1991, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "Needful Things", "year": 1991, "type": "Novel", "group": "Core"}, {"title": "Gerald's Game", "year": 1992, "type": "Novel", "group": "Core"}, {"title": "Dolores Claiborne", "year": 1992, "type": "Novel", "group": "Core"}, {"title": "Insomnia", "year": 1994, "type": "Novel", "group": "Core"}, {"title": "Rose Madder", "year": 1995, "type": "Novel", "group": "Core"}, {"title": "The Regulators", "year": 1996, "type": "Bachman", "group": "Bachman"}, {"title": "Desperation", "year": 1996, "type": "Novel", "group": "Core"}, {"title": "The Green Mile", "year": 1996, "type": "Novel", "group": "Core"}, {"title": "Wizard and Glass", "year": 1997, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "Bag of Bones", "year": 1998, "type": "Novel", "group": "Core"}, {"title": "The Girl Who Loved Tom Gordon", "year": 1999, "type": "Novel", "group": "Core"}, {"title": "Black House", "year": 2001, "type": "Collaboration", "group": "Collaboration"}, {"title": "Dreamcatcher", "year": 2001, "type": "Novel", "group": "Core"}, {"title": "From a Buick 8", "year": 2002, "type": "Novel", "group": "Core"}, {"title": "Wolves of the Calla", "year": 2003, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "The Dark Tower", "year": 2004, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "Song of Susannah", "year": 2004, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "The Colorado Kid", "year": 2005, "type": "Novel", "group": "Core"}, {"title": "Cell", "year": 2006, "type": "Novel", "group": "Core"}, {"title": "Lisey's Story", "year": 2006, "type": "Novel", "group": "Core"}, {"title": "Blaze", "year": 2007, "type": "Bachman", "group": "Bachman"}, {"title": "Duma Key", "year": 2008, "type": "Novel", "group": "Core"}, {"title": "Under the Dome", "year": 2009, "type": "Novel", "group": "Core"}, {"title": "11/22/63", "year": 2011, "type": "Novel", "group": "Core"}, {"title": "The Wind Through the Keyhole", "year": 2012, "type": "Dark Tower", "group": "Dark Tower"}, {"title": "Joyland", "year": 2013, "type": "Novel", "group": "Core"}, {"title": "Doctor Sleep", "year": 2013, "type": "Novel", "group": "Core"}, {"title": "Mr. Mercedes", "year": 2014, "type": "Novel", "group": "Bill Hodges / Holly"}, {"title": "Revival", "year": 2014, "type": "Novel", "group": "Core"}, {"title": "Finders Keepers", "year": 2015, "type": "Novel", "group": "Bill Hodges / Holly"}, {"title": "End of Watch", "year": 2016, "type": "Novel", "group": "Bill Hodges / Holly"}, {"title": "The Outsider", "year": 2018, "type": "Novel", "group": "Bill Hodges / Holly"}, {"title": "The Institute", "year": 2019, "type": "Novel", "group": "Core"}, {"title": "Later", "year": 2021, "type": "Novel", "group": "Core"}, {"title": "Billy Summers", "year": 2021, "type": "Novel", "group": "Core"}, {"title": "Gwendy's Final Task", "year": 2022, "type": "Collaboration", "group": "Collaboration"}, {"title": "Fairy Tale", "year": 2022, "type": "Novel", "group": "Core"}, {"title": "Holly", "year": 2023, "type": "Novel", "group": "Bill Hodges / Holly"}, {"title": "Never Flinch", "year": 2025, "type": "Novel", "group": "Bill Hodges / Holly"}, {"title": "Other Worlds Than These", "year": 2026, "type": "Collaboration", "group": "Collaboration"}, {"title": "The Mist", "year": 1980, "type": "Novella", "group": "Novella"}, {"title": "Rita Hayworth and Shawshank Redemption", "year": 1982, "type": "Novella", "group": "Novella"}, {"title": "The Body", "year": 1982, "type": "Novella", "group": "Novella"}, {"title": "Apt Pupil", "year": 1982, "type": "Novella", "group": "Novella"}, {"title": "The Breathing Method", "year": 1982, "type": "Novella", "group": "Novella"}, {"title": "The Langoliers", "year": 1990, "type": "Novella", "group": "Novella"}, {"title": "Secret Window, Secret Garden", "year": 1990, "type": "Novella", "group": "Novella"}, {"title": "The Library Policeman", "year": 1990, "type": "Novella", "group": "Novella"}, {"title": "The Sun Dog", "year": 1990, "type": "Novella", "group": "Novella"}, {"title": "Hearts in Atlantis", "year": 1999, "type": "Novella", "group": "Novella"}, {"title": "Low Men in Yellow Coats", "year": 1999, "type": "Novella", "group": "Novella"}, {"title": "Heavenly Shades of Night Are Falling", "year": 1999, "type": "Novella", "group": "Novella"}, {"title": "Why We're in Vietnam", "year": 1999, "type": "Novella", "group": "Novella"}, {"title": "N.", "year": 2008, "type": "Novella", "group": "Novella"}, {"title": "UR", "year": 2009, "type": "Novella", "group": "Novella"}, {"title": "Blockade Billy", "year": 2010, "type": "Novella", "group": "Novella"}, {"title": "Gwendy's Button Box", "year": 2017, "type": "Collaboration", "group": "Collaboration"}, {"title": "Elevation", "year": 2018, "type": "Novella", "group": "Novella"}, {"title": "If It Bleeds", "year": 2020, "type": "Novella", "group": "Novella"}, {"title": "Mr. Harrigan's Phone", "year": 2020, "type": "Novella", "group": "Novella"}, {"title": "The Life of Chuck", "year": 2020, "type": "Novella", "group": "Novella"}, {"title": "Rat", "year": 2020, "type": "Novella", "group": "Novella"}, {"title": "Night Shift", "year": 1978, "type": "Story Collection", "group": "Collections"}, {"title": "Different Seasons", "year": 1982, "type": "Story Collection", "group": "Collections"}, {"title": "Skeleton Crew", "year": 1985, "type": "Story Collection", "group": "Collections"}, {"title": "Four Past Midnight", "year": 1990, "type": "Story Collection", "group": "Collections"}, {"title": "Nightmares & Dreamscapes", "year": 1993, "type": "Story Collection", "group": "Collections"}, {"title": "Six Stories", "year": 1997, "type": "Story Collection", "group": "Collections"}, {"title": "Everything's Eventual", "year": 2002, "type": "Story Collection", "group": "Collections"}, {"title": "Just After Sunset", "year": 2008, "type": "Story Collection", "group": "Collections"}, {"title": "Full Dark, No Stars", "year": 2010, "type": "Story Collection", "group": "Collections"}, {"title": "The Bazaar of Bad Dreams", "year": 2015, "type": "Story Collection", "group": "Collections"}, {"title": "You Like It Darker", "year": 2024, "type": "Story Collection", "group": "Collections"}, {"title": "Danse Macabre", "year": 1981, "type": "Nonfiction", "group": "Nonfiction"}, {"title": "Nightmares in the Sky", "year": 1988, "type": "Nonfiction", "group": "Nonfiction"}, {"title": "Mid-Life Confidential", "year": 1994, "type": "Nonfiction", "group": "Nonfiction"}, {"title": "On Writing", "year": 2000, "type": "Nonfiction", "group": "Nonfiction"}, {"title": "Faithful", "year": 2004, "type": "Nonfiction", "group": "Nonfiction"}, {"title": "Guns", "year": 2013, "type": "Nonfiction", "group": "Nonfiction"}];
 const tower = {"The Gunslinger": 1, "The Drawing of the Three": 2, "The Waste Lands": 3, "Wizard and Glass": 4, "Wolves of the Calla": 5, "Song of Susannah": 6, "The Dark Tower": 7, "The Wind Through the Keyhole": 8};
@@ -441,54 +459,116 @@ function renderStats() {
   document.getElementById("bar").style.width = pct + "%";
 }
 
+
 function renderTower() {
   const titles = Object.keys(tower).sort((a,b) => tower[a] - tower[b]);
-  let done = 0;
-  let out = "";
-
+  let done = 0, out = "";
   titles.forEach(function(title) {
     const s = getBook(title);
     if (s.read) done++;
-    out += '<div class="tower-item ' + (s.read ? 'read' : '') + '">' +
+    out += '<div class="action-row ' + (s.read ? 'read' : '') + '" data-tower-title="' + esc(title) + '">' +
       '<div class="tower-num">' + tower[title] + '</div>' +
-      '<div class="tower-title">' + esc(title) + '</div>' +
-      '<div class="tower-check">' + (s.read ? '✓' : '') + '</div></div>';
+      '<div class="row-title"><div class="title">' + esc(title) + '</div>' +
+      '<div class="detail">' + (s.read ? 'Read' : 'Unread') + (s.rating ? ' · ' + '★'.repeat(s.rating) : '') + '</div></div>' +
+      '<div class="row-check">' + (s.read ? '✓' : '') + '</div>' +
+      '<button class="row-more" data-tower-detail="' + esc(title) + '" aria-label="Details">⋯</button></div>';
   });
-
   document.getElementById("towerList").innerHTML = out;
   document.getElementById("towerDone").textContent = done + " / " + titles.length;
   document.getElementById("towerPct").textContent = Math.round(done / titles.length * 100) + "%";
+
+  document.querySelectorAll("[data-tower-title]").forEach(function(row) {
+    row.onclick = function(e) {
+      if (e.target.closest(".row-more")) return;
+      const title = row.getAttribute("data-tower-title");
+      const s = getBook(title);
+      state[title] = Object.assign({}, s, {read: !s.read});
+      save(); renderAll();
+    };
+  });
+  document.querySelectorAll("[data-tower-detail]").forEach(function(btn) {
+    btn.onclick = function(e) { e.stopPropagation(); openBook(btn.getAttribute("data-tower-detail")); };
+  });
 }
 
 function renderMe() {
   const read = works.filter(w => getBook(w.title).read);
   const rereads = works.reduce((n,w) => n + Number(getBook(w.title).rereads || 0), 0);
-  const rated = works.filter(w => getBook(w.title).rating).length;
-  const notes = works.filter(w => getBook(w.title).notes).length;
+  const rated = works.filter(w => getBook(w.title).rating);
+  const notes = works.filter(w => getBook(w.title).notes);
 
   document.getElementById("meRead").textContent = read.length;
   document.getElementById("meRereads").textContent = rereads;
-  document.getElementById("meRated").textContent = rated;
-  document.getElementById("meNotes").textContent = notes;
+  document.getElementById("meRated").textContent = rated.length;
+  document.getElementById("meNotes").textContent = notes.length;
 
-  const first = read.slice().sort((a,b) => a.year - b.year)[0];
-  const latest = read.slice().sort((a,b) => b.year - a.year)[0];
-
+  const first = read.slice().sort((a,b) => a.year-b.year)[0];
+  const latest = read.slice().sort((a,b) => b.year-a.year)[0];
   document.getElementById("history").innerHTML =
     "<p><b>First claimed:</b> " + (first ? esc(first.title) : "Not yet") +
     "<br><b>Latest claimed:</b> " + (latest ? esc(latest.title) : "Not yet") + "</p>";
 
   document.getElementById("milestones").innerHTML = [10,25,50,75,100].map(function(n) {
-    return '<div class="place-card"><b>' + n + ' books</b><small>' +
-      (read.length >= n ? "🔓 Claimed" : "🔒 " + (n-read.length) + " to go") +
-      "</small></div>";
+    return '<button class="place-card stat-button" data-milestone="' + n + '"><b>' + n +
+      ' books</b><small>' + (read.length >= n ? "🔓 Claimed · Tap to review" : "🔒 " + (n-read.length) + " to go") + "</small></button>";
   }).join("");
 
   document.getElementById("places").innerHTML = places.map(function(p) {
-    return '<div class="place-card"><b>' + esc(p[0]) + '</b><small>' +
-      esc(p[1]) + '</small><div class="chips"><span class="chip">Start with ' +
-      esc(p[2]) + '</span></div></div>';
+    return '<button class="place-card stat-button" data-place="' + esc(p[0]) + '"><b>' + esc(p[0]) +
+      '</b><small>' + esc(p[1]) + '</small><div class="chips"><span class="chip">Explore works</span></div></button>';
   }).join("");
+
+  document.querySelectorAll("[data-me-filter]").forEach(function(btn) {
+    btn.onclick = function() { openMeList(btn.getAttribute("data-me-filter")); };
+  });
+  document.querySelectorAll("[data-milestone]").forEach(function(btn) {
+    btn.onclick = function() {
+      const n = Number(btn.getAttribute("data-milestone"));
+      openDrill("Milestone: " + n + " books", "Your reading milestone", read.slice(0,n));
+    };
+  });
+  document.querySelectorAll("[data-place]").forEach(function(btn) {
+    btn.onclick = function() {
+      const name = btn.getAttribute("data-place");
+      const matches = works.filter(function(w) {
+        return (conn[w.title] || []).some(function(tag) { return tag.toLowerCase() === name.toLowerCase(); });
+      });
+      openDrill(name, "Connected King works", matches);
+    };
+  });
+}
+
+function openMeList(filter) {
+  const matches = works.filter(function(w) {
+    const s = getBook(w.title);
+    if (filter === "read") return s.read;
+    if (filter === "rereads") return Number(s.rereads || 0) > 0;
+    if (filter === "rated") return Number(s.rating || 0) > 0;
+    if (filter === "notes") return !!s.notes;
+    return false;
+  }).sort(function(a,b) { return a.year-b.year || a.title.localeCompare(b.title); });
+  const labels = {read:"Books Read",rereads:"Rereads",rated:"Rated Books",notes:"Books With Notes"};
+  openDrill(labels[filter] || "Your Books", "Tap ⋯ for book details", matches);
+}
+
+function openDrill(title, meta, matches) {
+  document.getElementById("drillTitle").textContent = title;
+  document.getElementById("drillMeta").textContent = meta;
+  document.getElementById("drillBody").innerHTML = matches.length ? matches.map(function(w) {
+    const s = getBook(w.title);
+    return '<div class="action-row"><div class="row-title"><div class="title">' + esc(w.title) +
+      '</div><div class="detail">' + w.year + ' · ' + esc(w.type) +
+      (s.rating ? ' · ' + '★'.repeat(s.rating) : '') + '</div></div>' +
+      '<button class="row-more" data-drill-book="' + esc(w.title) + '">⋯</button></div>';
+  }).join("") : '<div class="empty">Nothing here yet.</div>';
+
+  document.querySelectorAll("[data-drill-book]").forEach(function(btn) {
+    btn.onclick = function() {
+      document.getElementById("drillModal").classList.remove("open");
+      openBook(btn.getAttribute("data-drill-book"));
+    };
+  });
+  document.getElementById("drillModal").classList.add("open");
 }
 
 function renderAll() {
@@ -557,6 +637,8 @@ document.getElementById("toggleRead").onclick = function() {
   renderAll();
 };
 
+document.getElementById("closeDrill").onclick=function(){document.getElementById("drillModal").classList.remove("open");};
+document.getElementById("drillModal").onclick=function(e){if(e.target.id==="drillModal")document.getElementById("drillModal").classList.remove("open");};
 document.getElementById("closeModal").onclick = function() {
   document.getElementById("modal").classList.remove("open");
 };
